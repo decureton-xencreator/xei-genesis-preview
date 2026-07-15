@@ -5,12 +5,14 @@ on:
     paths:
       - 'index.html'
       - 'src/**'
+      - 'tests/validate.mjs'
       - '.github/workflows/diamond-premiere-validation.yml'
   push:
     branches: [main]
     paths:
       - 'index.html'
       - 'src/**'
+      - 'tests/validate.mjs'
 
 jobs:
   validate:
@@ -19,24 +21,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - name: Validate JavaScript syntax
-        run: node --check src/app.js
-      - name: Validate canonical narrative and experience contract
         run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const html = fs.readFileSync('index.html','utf8');
-          const js = fs.readFileSync('src/app.js','utf8');
-          const css = fs.readFileSync('src/styles.css','utf8');
-          const requiredScenes = ['opening','assessment','mri','origin','manual','contribution','route','propagate','reveal','summary','mandate','close'];
-          for (const scene of requiredScenes) {
-            if (!js.includes(`'${scene}'`)) throw new Error(`Missing scene: ${scene}`);
-          }
-          for (const phrase of ['This manual is not actually a manual','What if every company you own','Checkmate 1 integration and comparison']) {
-            if (!js.includes(phrase)) throw new Error(`Missing canonical narrative: ${phrase}`);
-          }
-          if (!html.includes('DEMONSTRATION ENVIRONMENT')) throw new Error('Truth label missing');
-          if (!css.includes('prefers-reduced-motion')) throw new Error('Reduced-motion accessibility missing');
-          if (!js.includes('localStorage')) throw new Error('Resume-state capability missing');
-          NODE
+          node --check src/app-v4.js
+          node --check src/cursor-v4.js
+      - name: Validate canonical narrative and experience contract
+        run: node tests/validate.mjs
