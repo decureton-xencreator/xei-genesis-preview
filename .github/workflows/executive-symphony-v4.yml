@@ -21,7 +21,7 @@ jobs:
           node-version: 24
       - name: Validate active premiere syntax
         run: |
-          node --check src/app-v5.js
+          node --check src/app-v6.js
           node --check src/cursor-v5.js
       - name: Validate Executive Symphony continuity
         run: node tests/validate.mjs
