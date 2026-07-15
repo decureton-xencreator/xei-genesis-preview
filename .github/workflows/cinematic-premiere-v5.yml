@@ -1,13 +1,16 @@
-name: Executive Symphony Continuity Validation
+name: Cinematic Executive Premiere V5
 
 on:
   pull_request:
     branches: [main]
     paths:
       - 'index.html'
-      - 'src/**'
+      - 'src/app-v5.js'
+      - 'src/styles-v5.css'
+      - 'src/cursor-v5.js'
       - 'tests/validate.mjs'
-      - '.github/workflows/executive-symphony-v4.yml'
+      - 'docs/XEI-001-CINEMATIC-STORYBOARD-V5.md'
+      - '.github/workflows/cinematic-premiere-v5.yml'
   push:
     branches: [main]
 
@@ -19,9 +22,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Validate active premiere syntax
+      - name: Validate cinematic runtime syntax
         run: |
           node --check src/app-v5.js
           node --check src/cursor-v5.js
-      - name: Validate Executive Symphony continuity
+      - name: Validate storyboard and family continuity
         run: node tests/validate.mjs
