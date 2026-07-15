@@ -8,6 +8,7 @@ on:
       - 'src/app-v5.js'
       - 'src/styles-v5.css'
       - 'src/cursor-v5.js'
+      - 'tests/validate.mjs'
       - 'docs/XEI-001-CINEMATIC-STORYBOARD-V5.md'
       - '.github/workflows/cinematic-premiere-v5.yml'
   push:
@@ -21,40 +22,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: JavaScript syntax
+      - name: Validate cinematic runtime syntax
         run: |
           node --check src/app-v5.js
           node --check src/cursor-v5.js
-      - name: Storyboard acceptance contract
-        run: |
-          node - <<'NODE'
-          const fs=require('fs');
-          const html=fs.readFileSync('index.html','utf8');
-          const js=fs.readFileSync('src/app-v5.js','utf8');
-          const css=fs.readFileSync('src/styles-v5.css','utf8');
-          const checks={
-            'V5 production shell':html.includes('app-v5.js')&&html.includes('styles-v5.css')&&html.includes('cursor-v5.js'),
-            '13 directed acts':['arrival','memory','living','panama','bilingual','manual','teach','router','propagate','reveal','constellation','summary','mandate'].every(x=>js.includes(`'${x}'`)),
-            'company memory question':js.includes('Can your company remember?'),
-            'correct Checkmate ownership and BDC origin':js.includes("You created Checkmate's first real B D C department in Panama."),
-            'Living Company purpose centre':js.includes("ED'S<br>PURPOSE"),
-            'bilingual live manuals':js.includes('Comprende antes de persuadir')&&js.includes('ENGLISH')&&js.includes('ESPAÑOL'),
-            'interactive operating surface':js.includes('ASK THE MANUAL')&&js.includes('data-q'),
-            'Ed teaches company':js.includes('EDWARD · EXECUTIVE JUDGMENT')&&js.includes('Let Xen determine where it belongs'),
-            'governed approval':js.includes('EXECUTIVE APPROVAL REQUIRED')&&js.includes('Approve Evolution'),
-            'visible propagation':js.includes('ATTRIBUTED TO ED')&&js.includes('SYNCHRONISED'),
-            'earned Xen reveal':js.includes('The manual was only the first instrument.')&&js.includes('Xen is the conductor.'),
-            '24-company constellation':js.includes('length:24')&&js.includes("EDWARD'S<br>PURPOSE"),
-            'session-built executive summary':js.includes('EXECUTIVE SUMMARY · BUILT FROM THIS SESSION')&&js.includes('state.memory')&&js.includes('state.contribution'),
-            'second-meeting mandate':js.includes('Checkmate 1 integration and comparison')&&js.includes('SECOND-MEETING MANDATE'),
-            'no male fallback':js.includes("document.documentElement.dataset.voice=voice?'approved':'caption-only'")&&!js.includes('|| voices[0]'),
-            'caption fallback':html.includes('aria-live="polite"')&&js.includes('caption-only'),
-            'camera vocabulary':['approach','descend','orbit','dive','product','enter','macro','follow','pullback','reveal','constellation','document','corridor'].every(x=>js.includes(x)),
-            'scroll direction':js.includes('scrollIntoView')&&js.includes("behavior:'smooth'"),
-            'diamond presence':css.includes("content:'◇'")&&css.includes('@keyframes blink'),
-            'large screen and mobile':css.includes('@media(max-width:1000px)')&&css.includes('@media(max-width:650px)'),
-            'reduced motion':css.includes('prefers-reduced-motion')
-          };
-          let failed=0;for(const [name,ok] of Object.entries(checks)){console.log(`${ok?'PASS':'FAIL'} ${name}`);if(!ok)failed++}
-          if(failed)process.exit(1);
-          NODE
+      - name: Validate storyboard and family continuity
+        run: node tests/validate.mjs
