@@ -1,12 +1,13 @@
-name: Cinematic Executive Premiere V5
+name: Cinematic Executive Premiere V6
 
 on:
   pull_request:
     branches: [main]
     paths:
       - 'index.html'
-      - 'src/app-v5.js'
+      - 'src/app-v6.js'
       - 'src/styles-v5.css'
+      - 'src/director-v6.css'
       - 'src/cursor-v5.js'
       - 'tests/validate.mjs'
       - 'docs/XEI-001-CINEMATIC-STORYBOARD-V5.md'
@@ -22,9 +23,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Validate cinematic runtime syntax
+      - name: Validate master director syntax
         run: |
-          node --check src/app-v5.js
+          node --check src/app-v6.js
           node --check src/cursor-v5.js
-      - name: Validate storyboard and family continuity
+      - name: Validate cinematic continuity
         run: node tests/validate.mjs
