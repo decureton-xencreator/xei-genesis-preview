@@ -19,4 +19,5 @@ jobs:
           node --check src/xvs-human-delivery-v10.js
           node --check src/phone-transport-v10.js
           node --check src/phone-controls-spacing-v12.js
+          node --check src/phone-scene-captions-v13.js
       - run: node tests/phone-gold-v8.mjs
