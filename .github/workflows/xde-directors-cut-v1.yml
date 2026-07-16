@@ -22,7 +22,7 @@ jobs:
       - name: Preserve branching and completion
         run: node tests/xde-branching-completion.mjs
       - name: Preserve compartment integrity
-        run: node tests/xde-compartment-integrity-v1.mjs
+        run: node tests/xde-compartment-integrity.mjs
       - name: Preserve rollout contract
         run: node tests/xde-rollout-v1.mjs
       - name: Preserve XDE canon
