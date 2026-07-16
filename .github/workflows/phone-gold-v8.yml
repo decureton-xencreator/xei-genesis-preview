@@ -1,4 +1,4 @@
-name: Phone Gold Master V8
+name: Phone Gold Master V14
 on:
   pull_request:
     branches: [main]
@@ -13,10 +13,8 @@ jobs:
         with:
           node-version: 24
       - run: |
-          node --check src/mobile-phone-gold-v8.js
           node --check src/xvs-canonical-phone-v9.js
-          node --check src/mobile-interaction-stage-v9.js
           node --check src/xvs-human-delivery-v10.js
-          node --check src/phone-controls-spacing-v12.js
-          node --check src/phone-scene-captions-v13.js
+          node --check src/phone-gold-runtime-v14.js
+          node --check src/mobile-interaction-stage-v9.js
       - run: node tests/phone-gold-v8.mjs
