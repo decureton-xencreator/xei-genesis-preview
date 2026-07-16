@@ -137,6 +137,22 @@ if(PHONE){
   }
   beginButton.addEventListener('click',begin);
 
+  function protectStartGate(event){
+    if(runtime.started||runtime.restarting)return;
+    const target=event.target;
+    const isBegin=target instanceof Element&&target.closest('#phoneGoldBegin');
+    if(isBegin)return;
+    const keyStarts=event.type==='keydown'&&(event.key==='Enter'||event.key===' ');
+    const clickStarts=event.type==='click'&&target instanceof Element&&target.closest('#voice,#begin');
+    if(keyStarts||clickStarts){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      beginButton.focus({preventScroll:true});
+    }
+  }
+  document.addEventListener('keydown',protectStartGate,true);
+  document.addEventListener('click',protectStartGate,true);
+
   document.querySelector('#restart')?.addEventListener('click',()=>{
     runtime.restarting=true;
     nativeCancel?.();
@@ -151,6 +167,12 @@ if(PHONE){
     }
   },true);
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&runtime.started)pauseNarration()});
+
+  runtime.begin=begin;
+  runtime.pause=pauseNarration;
+  runtime.resume=resumeNarration;
+  runtime.restart=showLanding;
+  runtime.protectStartGate=protectStartGate;
 
   renderControls();
   showLanding();
