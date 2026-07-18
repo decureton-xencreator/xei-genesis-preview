@@ -20,7 +20,7 @@ for (const [position, clip] of clips.entries()) {
   const bytes = Buffer.from(await response.arrayBuffer());
   if (bytes.length < 1024) throw new Error(`Generated clip is unexpectedly small: ${clip.id}`);
   await writeFile(path, bytes);
-  generated.push({ ...clip, path, bytes: bytes.length });
+  generated.push({ ...clip, path, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
   console.log(`[${position + 1}/${clips.length}] ${clip.id} · ${bytes.length} bytes`);
 }
 
@@ -35,6 +35,7 @@ await writeFile(`${outputDirectory}/manifest.json`, `${JSON.stringify({
   voiceContract,
   instructionsSha256: createHash('sha256').update(instructions).digest('hex'),
   approvedAudition: 'assets/narration/xen-voice-audition-v2.mp3',
+  generationBatch: createHash('sha256').update(generated.map(clip => `${clip.id}:${clip.sha256}`).join('|')).digest('hex'),
   clips: generated.map(({ text, ...clip }) => clip)
 }, null, 2)}\n`);
 
