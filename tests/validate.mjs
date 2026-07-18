@@ -18,6 +18,12 @@ const required=[
  ,'src/solutions.js'
  ,'docs/XLC-ROLL-001-LIVING-COMPANY-COMMERCIAL-ROLLOUT.md'
  ,'governance/XLC-ROLL-001-COMMERCIAL-MANIFEST.json'
+ ,'xen-choice-config.json'
+ ,'src/choice-telemetry.js'
+ ,'tracking-worker/src/index.js'
+ ,'tracking-worker/wrangler.jsonc'
+ ,'tracking-worker/migrations/0001_choice_reporting.sql'
+ ,'choice-report.html'
 ];
 for(const file of required){
  if(!fs.existsSync(file))throw new Error(`Missing certified asset: ${file}`);
@@ -30,6 +36,10 @@ const runtime=fs.readFileSync('src/ed-premiere-clean-v1.js','utf8');
 const finish=fs.readFileSync('src/xfs-xen-centric-finish-v1.js','utf8');
 const solutions=fs.readFileSync('solutions.html','utf8');
 const solutionsRuntime=fs.readFileSync('src/solutions.js','utf8');
+const telemetry=fs.readFileSync('src/choice-telemetry.js','utf8');
+const trackingWorker=fs.readFileSync('tracking-worker/src/index.js','utf8');
+const trackingMigration=fs.readFileSync('tracking-worker/migrations/0001_choice_reporting.sql','utf8');
+const choiceReport=fs.readFileSync('choice-report.html','utf8');
 const css=fs.readFileSync('src/ed-premiere-clean-v1.css','utf8')+fs.readFileSync('src/xfs-xen-centric-finish-v1.css','utf8')+fs.readFileSync('src/xli-living-interface-v1.css','utf8');
 
 new Function(runtime);
@@ -77,6 +87,11 @@ for(const term of ['BDC DEPLOYMENT + MEASUREMENT SESSION','LIVING COMPANY BLUEPR
 for(const term of ['data-select-path="bdc"','data-select-path="company"','solutions.js?v=rollout-2','solutions.css?v=rollout-2'])if(!solutions.includes(term))throw new Error(`Single Gateway indexed interaction missing: ${term}`);
 if(solutions.includes('?path=')||finish.includes('solutions.html?source=')||finish.includes("link.href='solutions.html?"))throw new Error('Commercial path URLs must not multiply the canonical gateway');
 for(const term of ['sessionStorage.setItem','history.replaceState',"document.getElementById('appointment').scrollIntoView",'[data-select-path]'])if(!solutionsRuntime.includes(term))throw new Error(`Deterministic single-gateway state missing: ${term}`);
+for(const term of ['xen_invite_token','crypto.randomUUID()','credentials:\'omit\'','keepalive:true'])if(!telemetry.includes(term))throw new Error(`Choice telemetry client missing: ${term}`);
+for(const term of ['origin_not_allowed','payload_too_large','crypto.subtle.timingSafeEqual','INSERT OR IGNORE INTO events','revoked_at IS NULL','/v1/admin/report','/v1/admin/invites'])if(!trackingWorker.includes(term))throw new Error(`Choice reporting security contract missing: ${term}`);
+for(const term of ['CHECK (audience IN','CHECK (event_type IN','FOREIGN KEY (invite_hash)','CREATE INDEX events_invite_created_idx'])if(!trackingMigration.includes(term))throw new Error(`Choice reporting D1 contract missing: ${term}`);
+if(!finish.includes("reportChoice('path_selected',path)")||!solutionsRuntime.includes("reportChoice('second_appointment_continued',key)"))throw new Error('Choice reporting instrumentation missing');
+for(const term of ['Private choice report.','Create a private premiere link','/v1/admin/report','/v1/admin/invites','never stored by this page'])if(!choiceReport.includes(term))throw new Error(`Owner choice report missing: ${term}`);
 const rollout=JSON.parse(fs.readFileSync('governance/XLC-ROLL-001-COMMERCIAL-MANIFEST.json','utf8'));if(rollout.standard!=='XLC-ROLL-001'||rollout.publications.length!==9||!rollout.truth_boundary.no_invented_pricing)throw new Error('Commercial rollout governance failed');
 if(!rollout.single_gateway)throw new Error('Single canonical gateway rule missing');
 
@@ -103,4 +118,5 @@ console.log('PASS content-plane layering: borders and shimmer remain behind all 
 console.log('PASS standalone manual family, offer ladder, and three second-appointment continuations');
 console.log('PASS Living Company commercial truth and privacy boundaries');
 console.log('PASS one canonical gateway with indexed internal commercial states');
+console.log('PASS private invite choice reporting · D1 · owner-only reports');
 console.log('CERTIFIED XDE 2.3.1 SINGLE-GATEWAY ROLLOUT · XPS · DIAMOND');
