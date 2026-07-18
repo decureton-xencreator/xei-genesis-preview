@@ -307,3 +307,57 @@ body[data-scene="8"] .handoff-close{animation:xli-appointment-pulse 3.2s ease-in
 /* XLI-019 Automatic closeout call to action */
 .completion-cta{margin-top:12px;padding:15px 16px;border-radius:14px;border:1px solid rgba(217,182,111,.55);background:linear-gradient(135deg,rgba(217,182,111,.16),rgba(114,242,178,.07));color:#fff;font-size:10px;font-weight:850;line-height:1.35;letter-spacing:.12em;text-align:center;box-shadow:0 0 26px rgba(217,182,111,.13),inset 0 0 18px rgba(255,255,255,.025);animation:xli-closeout-cta 2.8s ease-in-out infinite}
 @keyframes xli-closeout-cta{50%{border-color:#f5d992;box-shadow:0 0 34px rgba(217,182,111,.28),inset 0 0 20px rgba(217,182,111,.07);transform:translateY(-1px)}}
+
+
+/* XLI-015 LOCKED TRUE-CENTER GEOMETRY
+   Final ownership: these coordinates supersede every historical frame-shift rule. */
+.knowledge-field{
+  --lost-origin-x:50%;
+  --lost-origin-y:48%;
+  --frame-shift-x:0px;
+}
+.knowledge-field .void{
+  left:50%!important;
+  top:48%!important;
+  transform:translate(-50%,-50%)!important;
+}
+.knowledge-field>span:nth-child(1){left:18%!important;top:18%!important}
+.knowledge-field>span:nth-child(2){left:82%!important;top:18%!important}
+.knowledge-field>span:nth-child(3){left:18%!important;top:82%!important}
+.knowledge-field>span:nth-child(4){left:82%!important;top:82%!important}
+
+.propagation-map{
+  --memory-origin-x:50%;
+  --memory-origin-y:46%;
+  --frame-shift-x:0px;
+}
+.propagation-map .core,
+.propagation-map:before,
+.propagation-map:after{
+  left:50%!important;
+  top:46%!important;
+}
+.propagation-map .core{transform:translate(-50%,-50%)!important}
+.propagation-map>span:nth-child(2){left:20%!important;top:17%!important}
+.propagation-map>span:nth-child(3){left:80%!important;top:17%!important}
+.propagation-map>span:nth-child(4){left:16%!important;top:50%!important}
+.propagation-map>span:nth-child(5){left:84%!important;top:50%!important}
+.propagation-map>span:nth-child(6){left:23%!important;top:83%!important}
+.propagation-map>span:nth-child(7){left:77%!important;top:83%!important}
+
+@media(max-width:430px){
+  .knowledge-field{--lost-origin-x:50%;--lost-origin-y:48%;--frame-shift-x:0px}
+  .knowledge-field .void{left:50%!important;top:48%!important}
+  .knowledge-field>span:nth-child(1){left:18%!important;top:17%!important}
+  .knowledge-field>span:nth-child(2){left:82%!important;top:17%!important}
+  .knowledge-field>span:nth-child(3){left:18%!important;top:83%!important}
+  .knowledge-field>span:nth-child(4){left:82%!important;top:83%!important}
+  .propagation-map{--memory-origin-x:50%;--memory-origin-y:46%;--frame-shift-x:0px}
+  .propagation-map .core,.propagation-map:before,.propagation-map:after{left:50%!important;top:46%!important}
+  .propagation-map>span:nth-child(2){left:19%!important;top:16%!important}
+  .propagation-map>span:nth-child(3){left:81%!important;top:16%!important}
+  .propagation-map>span:nth-child(4){left:16%!important;top:50%!important}
+  .propagation-map>span:nth-child(5){left:84%!important;top:50%!important}
+  .propagation-map>span:nth-child(6){left:22%!important;top:84%!important}
+  .propagation-map>span:nth-child(7){left:78%!important;top:84%!important}
+}
