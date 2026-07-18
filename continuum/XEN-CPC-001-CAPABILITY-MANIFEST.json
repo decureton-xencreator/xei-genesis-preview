@@ -1,6 +1,6 @@
 {
   "capabilityId": "XEN-CPC-001-STAGE-2-DURABLE-RUNTIME",
-  "version": "0.2.0-reconstruction",
+  "version": "0.3.0-reconstruction",
   "status": "local-repository-validation-candidate",
   "reconstruction": {
     "kind": "new-reconstruction-from-partial-canonical-evidence",
@@ -30,7 +30,16 @@
     "tableCount": 20,
     "queue": "CONTINUUM_QUEUE",
     "artifactStore": "CONTINUUM_ARTIFACTS",
-    "modelExecutionDefault": "disabled"
+    "modelExecutionDefault": "disabled",
+    "providers": {
+      "anthropic": {
+        "adapter": "implemented-local-validation",
+        "defaultModel": "claude-sonnet-5",
+        "secretName": "ANTHROPIC_API_KEY",
+        "connected": false,
+        "liveSmokeTest": false
+      }
+    }
   },
   "truth": {
     "productionShellModified": false,

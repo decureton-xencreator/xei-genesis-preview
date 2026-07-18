@@ -14,6 +14,7 @@ const required = [
   "src/workflows/mission-workflow.ts",
   "XEN-CPC-001-CAPABILITY-MANIFEST.json",
   "FAMILY-DEPENDENCIES.md",
+  "ANTHROPIC-PROVIDER.md",
   "RECONSTRUCTION.md",
   "CONTINUITY.md",
   "RELEASE.md",
