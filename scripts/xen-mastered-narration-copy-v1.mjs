@@ -1,10 +1,12 @@
 export const voice = 'marin';
+export const voiceContract = 'XVS-001-MARIN-EXCLUSIVE-v1';
 
 export const instructions = [
   'Speak as Xen: an exceptionally polished British executive assistant serving a discreet billionaire family office.',
   'Use an elegant, cultivated contemporary British accent with crisp diction, refined vowels, and effortless social confidence.',
   'Sound warm, gracious, highly intelligent, impeccably composed, and quietly authoritative—as though every detail is already under control.',
   'Keep the pleasant natural tone from the approved Xen voice audition v2, while making the delivery distinctly posh and professionally elevated.',
+  'Maintain exactly the same vocal identity, apparent age, accent, warmth, pitch range, cadence, energy, and microphone presence in every clip. This is one continuous performance by one exclusive Xen voice, never a new interpretation from page to page.',
   'Use measured cinematic pacing with fluid phrasing, gentle warmth, subtle wit, and a restrained premium presence.',
   'Never sound seductive, ominous, breathy, theatrical, robotic, predatory, condescending, or like a horror trailer.',
   'Avoid exaggerated pauses, vocal fry, caricatured royalty, and an overdone period-drama accent. Make the listener feel safe, welcomed, impressed, and personally looked after.'
@@ -14,7 +16,7 @@ const defaultScenes = {
   1: 'Growth creates knowledge. Xen makes sure growth does not lose what it teaches.',
   2: 'Most companies answer that risk with documents. Xen preserves the judgment behind them.',
   3: 'Marisol worked with Checkmate for roughly six months. During that time, she used the operating knowledge base you created with Xen. When she left the role, that shared knowledge did not leave with her. Xen preserved the connected department, its standards, and the reasoning already built into the work. Vianka inherited governed operating memory instead of an empty chair. Browse the complete manuals below and choose one governed publication to inspect the proof.',
-  4: 'A Living Company learns when leadership teaches Xen what must endure.',
+  4: 'A Living Company learns when leadership teaches Xen what must endure. Read the question, then choose one of the three answers below. Your selection teaches Xen the principle to preserve and continues the experience.',
   5: 'One approved principle becomes operating memory across every authorized layer.',
   6: 'Once Xen proves what works in one company, the ecosystem can compound it.',
   7: 'The next question is simple. Where should Xen prove herself next? Choose one path to reveal its focused second-meeting plan.'
@@ -32,7 +34,7 @@ const audienceScenes = {
     1: 'Growth creates knowledge. A living brand must preserve what the company learns, or the experience becomes inconsistent as the organization grows.',
     2: 'Documents can store standards. Xen connects the judgment behind those standards to the experience people actually encounter.',
     3: defaultScenes[3],
-    4: 'A brand becomes trustworthy when leadership teaches the company what must remain true in every interaction.',
+    4: 'A brand becomes trustworthy when leadership teaches the company what must remain true in every interaction. Read the question, then choose one of the three answers below. Your selection teaches Xen the principle to preserve and continues the experience.',
     5: 'One approved principle becomes operating memory, allowing every authorized layer to express the same promise without becoming generic.',
     6: 'Once one company proves a living experience, the group can reuse what works while every organization keeps its own identity.',
     7: 'Now choose where Xen should prove herself next. Each selection continues into its own focused second-meeting plan.'
@@ -41,7 +43,7 @@ const audienceScenes = {
     1: 'Growth creates knowledge. A living experience keeps that knowledge connected so execution does not drift as the company expands.',
     2: 'Documents can capture information. Xen preserves the operating judgment behind them and makes it available inside the work.',
     3: defaultScenes[3],
-    4: 'A company learns when leadership identifies the principle that every future representative must understand.',
+    4: 'A company learns when leadership identifies the principle that every future representative must understand. Read the question, then choose one of the three answers below. Your selection teaches Xen the principle to preserve and continues the experience.',
     5: 'One approved principle becomes operating memory across every authorized layer, without repeatedly rebuilding the lesson.',
     6: 'When one company proves what works, the ecosystem can compound that knowledge while each organization remains distinct.',
     7: 'Now choose where Xen should prove herself next. Each selection continues into its own focused second-meeting plan.'
