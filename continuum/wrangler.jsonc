@@ -9,6 +9,8 @@
   "vars": {
     "XEN_RUNTIME_MODE": "local-reconstruction",
     "XEN_AUTH_MODE": "local-headers"
+    ,"XEN_SAFE_MODE": "true"
+    ,"XEN_EMERGENCY_STOP": "false"
   },
   "d1_databases": [
     {
@@ -77,9 +79,12 @@
         "XEN_ACCESS_AUD": "c007ebf6201f421334e7234f20eea96dfbf6106e1b985c28cc9bf1f1684b0d02",
         "XEN_ACCESS_ADMIN_EMAIL_SHA256": "8bc36a88c3de70a77d268157d44a980966d977e894fdfe7d14ad094e5af25206",
         "XEN_MODEL_EXECUTION": "enabled",
+        "XEN_SAFE_MODE": "false",
+        "XEN_EMERGENCY_STOP": "false",
         "ANTHROPIC_MODEL": "claude-sonnet-5",
         "ANTHROPIC_MAX_CONCURRENCY": "1",
         "ANTHROPIC_DAILY_BUDGET_USD": "5.00",
+        "ANTHROPIC_MONTHLY_BUDGET_USD": "50.00",
         "ANTHROPIC_MISSION_BUDGET_USD": "0.10"
       },
       "d1_databases": [

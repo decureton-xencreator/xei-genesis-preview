@@ -1,5 +1,11 @@
 # Stage 2 Continuity
 
+## 2026-07-19 governor milestone
+
+- Added pre-provider dependency enforcement, conservative cost authorization, mission/daily/monthly budgets, provider-call limits, worker leases, provider resource locks, Safe Mode, emergency stop, and guaranteed normal-path release.
+- Staging provider concurrency remains one. This is an enforced control, not evidence of a higher-concurrency production envelope.
+- Continue with failure-injection guard-expiry/recovery tests, priority/fair scheduling, and server-backed Xenesis integration while preserving the shell isolation gate.
+
 The production experience remains owned by the existing root index.html and its nine-scene client runtime. The Continuum module has no import, script tag, route, build step, or lifecycle dependency from that shell.
 
 ## Local continuation
@@ -26,4 +32,4 @@ Local authenticated requests require X-Xen-Local-Actor, X-Xen-Local-Tenant, and 
 
 ## External boundary
 
-Do not deploy this configuration as-is. Its D1 identifier is an explicit local placeholder and its resource names are local-development names. Production or staging requires a separate authorization to select an account and deployment target, provision or map resources, configure cryptographically verified Cloudflare Access, enter secrets interactively, set cost limits, run capped live tests, and approve publication.
+The base configuration remains local-only. The explicit `staging` environment is deployed behind cryptographically verified Cloudflare Access with D1, Queue, Workflow, Durable Object and R2 bindings. Production remains unauthorized. Secrets must be entered interactively and must never enter source, logs, screenshots, generated files or deployment output.

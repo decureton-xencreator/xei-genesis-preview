@@ -18,6 +18,12 @@ function response(body: unknown, status = 200): Response {
   });
 }
 
+function assertExecutionAvailable(env: Env): void {
+  const control = env as Env & { XEN_SAFE_MODE?: string; XEN_EMERGENCY_STOP?: string };
+  if (control.XEN_EMERGENCY_STOP === "true") throw new RuntimeError("emergency_stop", "Emergency stop is active.", 503);
+  if (control.XEN_SAFE_MODE === "true") throw new RuntimeError("safe_mode", "Safe Mode denies mission execution.", 503);
+}
+
 function smokeApprovalPage(): Response {
   return new Response(
     `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Xen Continuum Claude Smoke Test</title><body><main><h1>Xen Continuum Claude Smoke Test</h1><p>This creates exactly one low-risk analytical mission. Maximum output: 1,024 tokens. Maximum authorized mission cost: $0.10. No repository or external action is permitted.</p><form method="post"><button type="submit">Approve and run one Claude smoke test</button></form></main></body></html>`,
@@ -123,6 +129,8 @@ async function route(request: Request, env: Env, ctx: ExecutionContext): Promise
       mode: env.XEN_RUNTIME_MODE,
       externalEffects: modelExecution === "enabled" ? "approval-gated" : "disabled",
       modelProvider: modelExecution === "enabled" ? "anthropic" : "disabled",
+      safeMode: (env as Env & { XEN_SAFE_MODE?: string }).XEN_SAFE_MODE === "true",
+      emergencyStop: (env as Env & { XEN_EMERGENCY_STOP?: string }).XEN_EMERGENCY_STOP === "true",
       correlationId,
     });
   }
@@ -140,6 +148,7 @@ async function route(request: Request, env: Env, ctx: ExecutionContext): Promise
     requireAuthority(actor, "admin");
     if (request.method === "GET") return smokeApprovalPage();
     if (request.method !== "POST") throw new RuntimeError("method_not_allowed", "Method not allowed.", 405);
+    assertExecutionAvailable(env);
     if (request.headers.get("origin") !== url.origin || request.headers.get("sec-fetch-site") !== "same-origin") {
       throw new RuntimeError("smoke_approval_origin_invalid", "Smoke-test approval must originate from the protected same-origin page.", 403);
     }
@@ -307,6 +316,7 @@ async function route(request: Request, env: Env, ctx: ExecutionContext): Promise
 
   if (request.method === "POST" && action === "dispatch") {
     requireAuthority(actor, "execute");
+    assertExecutionAvailable(env);
     const data = await body(request);
     if (!Number.isInteger(data.expectedVersion) || (data.expectedVersion as number) < 1) {
       throw new RuntimeError("invalid_version", "expectedVersion must be a positive integer.", 422);
@@ -388,6 +398,7 @@ const worker: ExportedHandler<Env, DispatchMessage> = {
     for (const message of batch.messages) {
       const payload = message.body;
       try {
+        assertExecutionAvailable(env);
         await env.CONTINUUM_DB.prepare(
           "INSERT INTO queue_receipts(id, tenant_id, mission_id, correlation_id, status, received_at) VALUES (?, ?, ?, ?, 'received', ?)",
         )

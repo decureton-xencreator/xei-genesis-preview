@@ -1,6 +1,7 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
 import type { Actor, MissionWorkflowParams } from "../contracts";
 import { AnthropicProvider, DisabledModelProvider, ProviderError, type ModelProvider } from "../models";
+import { acquireExecutionGuard, conservativeAnthropicEstimate, releaseExecutionGuard } from "../governor";
 
 const MAX_OUTPUT_TOKENS = 1024;
 
@@ -11,6 +12,10 @@ type RuntimeEnv = Omit<Env, "XEN_RUNTIME_MODE" | "XEN_AUTH_MODE"> & {
   ANTHROPIC_API_KEY?: string;
   ANTHROPIC_MODEL?: string;
   ANTHROPIC_MISSION_BUDGET_USD?: string;
+  ANTHROPIC_DAILY_BUDGET_USD?: string;
+  ANTHROPIC_MONTHLY_BUDGET_USD?: string;
+  XEN_SAFE_MODE?: string;
+  XEN_EMERGENCY_STOP?: string;
 };
 
 function numberSetting(value: string | undefined, fallback: number): number {
@@ -44,6 +49,8 @@ export class MissionWorkflow extends WorkflowEntrypoint<RuntimeEnv, MissionWorkf
       source: params.runtimeMode === "staging" ? "cloudflare-access" : "local-development",
     };
     const mission = await step.do("validate-authority-and-load-mission", async () => {
+      if (this.env.XEN_EMERGENCY_STOP === "true") throw new Error("Emergency stop is active.");
+      if (this.env.XEN_SAFE_MODE === "true") throw new Error("Safe Mode denies external model execution.");
       const current = await stub.getMission(params.tenantId);
       if (!current?.approval || current.state !== "queued") throw new Error("Mission is absent, unapproved, or not queued.");
       if (current.risk === "critical") throw new Error("Critical-risk model execution is denied.");
@@ -63,16 +70,50 @@ export class MissionWorkflow extends WorkflowEntrypoint<RuntimeEnv, MissionWorkf
         ).bind(workflowId, JSON.stringify({ missionVersion: mission.version, approvedBy: approval.actorId }), now),
       ]);
     });
-    const running = await step.do("mark-running", async () => stub.transition({
-      tenantId: params.tenantId, actor, target: "running", expectedVersion: params.expectedVersion,
-      idempotencyKey: `${params.correlationId}:running`, reason: "Governed Workflow execution started.",
-    }));
+    const guard = await step.do("authorize-budget-and-acquire-guards", async () => {
+      const limits = await this.env.CONTINUUM_DB.prepare(
+        "SELECT cost_limit_usd, provider_call_limit FROM missions WHERE id = ? AND tenant_id = ?",
+      ).bind(params.missionId, params.tenantId).first<{ cost_limit_usd: number; provider_call_limit: number }>();
+      if (!limits) throw new Error("Durable mission record is absent before guard acquisition.");
+      const acquired = await acquireExecutionGuard(this.env.CONTINUUM_DB, {
+        tenantId: params.tenantId,
+        missionId: params.missionId,
+        workflowId,
+        missionLimitUsd: Math.min(limits.cost_limit_usd, numberSetting(this.env.ANTHROPIC_MISSION_BUDGET_USD, 0.1)),
+        dailyLimitUsd: numberSetting(this.env.ANTHROPIC_DAILY_BUDGET_USD, 5),
+        monthlyLimitUsd: numberSetting(this.env.ANTHROPIC_MONTHLY_BUDGET_USD, 50),
+        providerCallLimit: limits.provider_call_limit,
+        estimatedCallUsd: conservativeAnthropicEstimate(mission.objective, MAX_OUTPUT_TOKENS),
+        leaseSeconds: 180,
+      });
+      try {
+        const attempt = await this.env.CONTINUUM_DB.prepare("SELECT COALESCE(MAX(attempt_number), 0) + 1 AS number FROM mission_attempts WHERE mission_id = ?").bind(params.missionId).first<{ number: number }>();
+        await this.env.CONTINUUM_DB.prepare("INSERT INTO mission_attempts(id, mission_id, attempt_number, state, started_at) VALUES (?, ?, ?, 'running', ?)")
+          .bind(crypto.randomUUID(), params.missionId, attempt?.number ?? 1, new Date().toISOString()).run();
+        return acquired;
+      } catch (error) {
+        await releaseExecutionGuard(this.env.CONTINUUM_DB, acquired);
+        throw error;
+      }
+    });
+    let running;
+    try {
+      running = await step.do("mark-running", async () => stub.transition({
+        tenantId: params.tenantId, actor, target: "running", expectedVersion: params.expectedVersion,
+        idempotencyKey: `${params.correlationId}:running`, reason: "Governed Workflow execution started.",
+      }));
+    } catch (error) {
+      await step.do("release-guards-after-start-failure", async () => releaseExecutionGuard(this.env.CONTINUUM_DB, guard));
+      throw error;
+    }
 
     try {
       const result = await step.do(
         "invoke-provider-once",
         { retries: { limit: 0, delay: "1 second", backoff: "constant" }, timeout: "2 minutes" },
         async () => {
+          const current = await stub.getMission(params.tenantId);
+          if (current?.state !== "running") throw new Error("Mission was paused or cancelled before provider invocation.");
           const missionBudget = numberSetting(this.env.ANTHROPIC_MISSION_BUDGET_USD, 0.1);
           if (missionBudget <= 0) throw new Error("Mission provider budget is exhausted.");
           const invocationId = crypto.randomUUID();
@@ -148,6 +189,10 @@ export class MissionWorkflow extends WorkflowEntrypoint<RuntimeEnv, MissionWorkf
         ]);
       });
       throw error;
+    } finally {
+      await step.do("release-worker-lease-and-resource-lock", async () => {
+        await releaseExecutionGuard(this.env.CONTINUUM_DB, guard);
+      });
     }
   }
 }
