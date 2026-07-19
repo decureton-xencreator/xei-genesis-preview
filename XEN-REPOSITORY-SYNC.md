@@ -44,3 +44,8 @@ Xenesis Preview may demonstrate M3 and reconstruction-adapter concepts only as e
 ## XSMDE 1.0.0 completion — 2026-07-19
 
 Xenesis Preview may demonstrate the completed XSMDE reference product with explicit reference/demo/external-gate states and no private evidence.
+
+
+## XSMDE public product deployment — 2026-07-19
+
+Xenesis Preview records the live XSMDE product as deployed while preserving private evidence and external-certification boundaries.
