@@ -34,3 +34,8 @@ Registered and synchronized with the active Xen repository network as of 2026-07
 ## XSMDE-002 propagation — 2026-07-19
 
 Xenesis Preview may demonstrate XSMDE concepts only with explicit preview/implemented/not-certified states and must not expose private home evidence.
+
+
+## XSMDE-003 propagation — 2026-07-19
+
+Xenesis Preview may demonstrate M3 and reconstruction-adapter concepts only as explicit reference-runtime or preview states.
