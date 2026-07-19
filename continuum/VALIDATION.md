@@ -70,3 +70,11 @@ No remote, physical-device, Cloudflare account, Access JWT, provider, load, cost
 - Anthropic secret absent; model execution disabled; no provider call or cost incurred.
 
 The earlier statement denying all remote deployment evidence is retained as the historical local-validation boundary. This section is the later, bounded staging evidence and does not establish provider, Access, cross-device, load, cost, or production certification.
+
+## Governor and scheduler validation — 2026-07-19
+
+- Worker version `5c222158-1e20-4bdb-ba65-41e5bc53d5d4` enforces dependency checks, pre-call budgets, Safe Mode, emergency stop, leases, locks, and pre-provider mission-state revalidation.
+- Canonical migration `0004_canonical_evidence_backfill.sql` applied remotely and reconciled the proven smoke evidence into `mission_costs`, `provider_calls`, `mission_artifacts`, and `mission_validation_evidence` without a new provider call.
+- The queue admission scheduler adds priority, bounded aging, tenant-activity fairness, scheduled-time eligibility, dependency exclusion, and the four-mission/four-WMU candidate envelope.
+- Strict TypeScript and 27 runtime tests across six files pass. Scheduler tests cover priority, both capacity dimensions, blocked dependencies, bounded starvation aging, and the fairness tie-break.
+- These are implementation and staging-validation facts, not a production concurrency certification. Multi-tenant load, workflow-start races, crash recovery, and repository-conflict measurements remain open.
