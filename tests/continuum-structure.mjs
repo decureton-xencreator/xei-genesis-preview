@@ -14,6 +14,7 @@ const required = [
   "schemas/event-envelope.schema.json",
   "src/index.ts",
   "src/governor.ts",
+  "src/scheduler.ts",
   "src/durable/mission-coordinator.ts",
   "src/workflows/mission-workflow.ts",
   "XEN-CPC-001-CAPABILITY-MANIFEST.json",
