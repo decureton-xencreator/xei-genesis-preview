@@ -78,3 +78,4 @@ The earlier statement denying all remote deployment evidence is retained as the 
 - The queue admission scheduler adds priority, bounded aging, tenant-activity fairness, scheduled-time eligibility, dependency exclusion, and the four-mission/four-WMU candidate envelope.
 - Strict TypeScript and 27 runtime tests across six files pass. Scheduler tests cover priority, both capacity dimensions, blocked dependencies, bounded starvation aging, and the fairness tie-break.
 - These are implementation and staging-validation facts, not a production concurrency certification. Multi-tenant load, workflow-start races, crash recovery, and repository-conflict measurements remain open.
+- Migration `0005_global_provider_lock.sql` corrects the preliminary tenant-scoped provider lock to a globally unique active provider lock, matching the configured Anthropic concurrency limit of one.
