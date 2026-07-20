@@ -28,6 +28,11 @@ const required=[
  ,'scripts/generate-xen-mastered-narration.mjs'
  ,'scripts/verify-xen-mastered-narration.mjs'
  ,'.github/workflows/generate-xen-mastered-narration.yml'
+ ,'assets/checkmate-executive-mark.svg'
+ ,'src/executive-arrival-v1.css'
+ ,'src/executive-arrival-v1.js'
+ ,'executive-rollout-kit.html'
+ ,'Reports/SWS-XBE-AM002-WARDEN-CLOSE-2026-07-19.md'
 ];
 for(const file of required){
  if(!fs.existsSync(file))throw new Error(`Missing certified asset: ${file}`);
@@ -48,14 +53,17 @@ const css=fs.readFileSync('src/ed-premiere-clean-v1.css','utf8')+fs.readFileSync
 const masteredCopy=fs.readFileSync('scripts/xen-mastered-narration-copy-v1.mjs','utf8');
 const masteredGenerator=fs.readFileSync('scripts/generate-xen-mastered-narration.mjs','utf8');
 const masteredWorkflow=fs.readFileSync('.github/workflows/generate-xen-mastered-narration.yml','utf8');
+const rolloutKit=fs.readFileSync('executive-rollout-kit.html','utf8');
 
 new Function(runtime);
 new Function(finish);
 new Function(solutionsRuntime);
+for(const term of ['Ed’s package','Kim’s package','Ahmer’s package','AM-002 v1.3 · Warden truth boundary','viewer=ed','viewer=kim','viewer=ahmer','Copy Ed’s email','Copy Kim’s email','Copy Ahmer’s email'])if(!rolloutKit.includes(term))throw new Error(`Executive rollout kit contract missing: ${term}`);
 
 if((html.match(/class="scene/g)||[]).length!==9)throw new Error('Nine-scene documentary contract failed');
-if((html.match(/<script type="module"/g)||[]).length!==2)throw new Error('Unexpected production runtime count');
-for(const asset of ['ed-premiere-clean-v1.js?v=mastered-audio-v3','xfs-xen-centric-finish-v1.js?v=solutions-gateway-2','xfs-xen-centric-finish-v1.css?v=commercial-rollout-1'])if(!html.includes(asset))throw new Error(`Active finish asset missing: ${asset}`);
+if((html.match(/<script type="module"/g)||[]).length!==3)throw new Error('Unexpected production runtime count');
+for(const asset of ['executive-arrival-v1.js?v=bespoke-1','executive-arrival-v1.css?v=bespoke-1','ed-premiere-clean-v1.js?v=mastered-audio-v3','xfs-xen-centric-finish-v1.js?v=solutions-gateway-2','xfs-xen-centric-finish-v1.css?v=commercial-rollout-1'])if(!html.includes(asset))throw new Error(`Active finish asset missing: ${asset}`);
+for(const term of ['A BESPOKE EXECUTIVE EXPERIENCE','data-arrival-name','Checkmate Holding Group','Nine scenes · Governed proof · Your decision'])if(!html.includes(term))throw new Error(`Bespoke executive arrival contract missing: ${term}`);
 if((html.match(/checkmate-bdc-operating-system\.pages\.dev/g)||[]).length<5)throw new Error('Canonical BDC manual links missing');
 
 for(const term of [
@@ -77,7 +85,7 @@ for(const term of [
  "document.body.dataset.audioState='playing'",
  "masteredAudio.setAttribute('playsinline','')",
  'masteredAudio.currentTime',
- "assets/narration/mastered-v1/${id}.mp3",
+ 'function clipUrl(id)',
  'finaleReady=true',
  'completed||!finaleReady||!runWarden()',
  "next.addEventListener('click'",
@@ -123,6 +131,8 @@ for(const term of [
  'safe-area-inset-bottom',
  'touch-action:manipulation'
 ])if(!css.includes(term))throw new Error(`XPS visual gate missing: ${term}`);
+
+for(const term of ['XMP-M4 PRESENTATION KIT INHERITANCE','height:100dvh','grid-template-rows:auto minmax(0,1fr) auto','content before chrome','@media(min-width:900px)','@media(max-width:899px)','@media(max-width:620px)','focus-visible','prefers-reduced-motion'])if(!css.includes(term))throw new Error(`XMP presentation standard missing: ${term}`);
 
 console.log('PASS XPS mobile and accessibility surface');
 console.log('PASS Diamond centered geometry and finish-mode illumination');
