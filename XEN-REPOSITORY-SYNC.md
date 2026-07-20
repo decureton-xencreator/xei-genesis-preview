@@ -59,3 +59,9 @@ Xenesis Preview may demonstrate the Xen Academy Dashboard, Academic Advisor, mis
 The preview must not expose private learner history, scores, progress, voice transcripts, or personal course-state records. Persistent-state, live coaching, XP, mastery, and certification claims require verified runtime evidence.
 
 AM-002 permits governed preview synchronization; XGW-001 enforces privacy, evidence, accessibility, truth-label, and continuation boundaries.
+
+## XBE-001 bespoke executive rollout synchronization — 2026-07-19
+
+The Checkmate executive premiere now inherits AM-002 Version 1.3 and active Warden scope on top of the current repository baseline. The implementation includes Checkmate-first arrival, recipient-specific Ed/Kim/Ahmer routes, XMP Milestone 4 presentation principles, a copy-ready owner rollout kit, and an explicit distinction between personalized public routes and access-controlled Worker invitations.
+
+Repository completion does not certify GitHub Pages publication, external audio delivery, physical-device acceptance, or invitation-worker availability. Those states require separate release evidence.
