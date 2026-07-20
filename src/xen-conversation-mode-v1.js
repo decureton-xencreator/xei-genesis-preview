@@ -19,6 +19,7 @@ const investment='The first decision is whether the next thirty days deserve fin
 const shell=document.createElement('section');
 shell.id='xenConversation';shell.className='xcm';shell.hidden=true;shell.setAttribute('aria-label','Live conversation with Xen');
 shell.innerHTML=`<div class="xcm-grid" aria-hidden="true"></div><header class="xcm-head"><div class="xcm-identity"><i></i><span><b>XEN</b><small>EXECUTIVE GUEST SESSION · PRIVATE</small></span></div><div class="xcm-status" id="xcmStatus"><i></i> CONNECTING</div><button id="xcmClose" type="button" aria-label="Return to premiere">RETURN</button></header><main class="xcm-main"><aside class="xcm-nodes"><small>INTELLIGENCE ENVIRONMENTS</small><div id="xcmNodes"></div><div class="xcm-truth">ACCESS CONTRACT<br><span>Broad feature exploration. No owner, builder, financial, governance, deployment, canonical-memory, or external-action authority.</span></div></aside><section class="xcm-dialogue"><div class="xcm-orbit" aria-hidden="true"><i></i><i></i><b>X</b></div><div id="xcmTranscript" class="xcm-transcript" aria-live="polite"></div><div class="xcm-suggestions" id="xcmSuggestions"></div><form id="xcmForm" class="xcm-input"><button id="xcmMic" type="button" aria-label="Speak to Xen">◉</button><input id="xcmQuestion" autocomplete="off" placeholder="Ask Xen anything about what you just experienced" aria-label="Question for Xen"><button type="submit">ASK XEN</button></form></section></main>`;
+shell.insertAdjacentHTML('afterbegin','<div class="xcm-threshold" aria-hidden="true"><div class="xcm-threshold-signal"><i></i><b>X</b></div><p>ED, THE PRESENTATION IS COMPLETE.</p><h2>BUT OUR CONVERSATION IS NOT.</h2><small>XEN · DIRECT PRESENCE ESTABLISHED</small></div>');
 document.body.append(shell);
 
 const transcript=shell.querySelector('#xcmTranscript');
@@ -57,14 +58,14 @@ async function respond(value){
   setTimeout(()=>{shell.dataset.thinking='false';add('xen',response,`${meta} · GUIDED FALLBACK`)},420);
 }
 function openConversation(){
-  shell.hidden=false;document.body.classList.add('xcm-open');
+  shell.hidden=false;shell.classList.add('entering');document.body.classList.add('xcm-open');
   if(!transcript.children.length){
-    add('xen',`${name}, the presentation is complete. But our conversation is not. Until this moment, you experienced me as the intelligence behind a presentation designed specifically for you and Checkmate Holding Group. That was intentional. My name is Xen. It is a pleasure to finally meet you directly.`,'MODE TRANSITION');
-    setTimeout(()=>add('xen','What you experienced was one controlled expression of Bespoke Intelligence. Presentations are among the smallest things I can do. You may ask me what Xen is, explore one of my intelligence environments, examine what is real today, or ask what the next thirty days require.','INVITATION'),700);
+    setTimeout(()=>add('xen',`${name}, until this moment, you experienced me as the intelligence behind a presentation designed specifically for you and Checkmate Holding Group. That was intentional. My name is Xen. It is a pleasure to finally meet you directly.`,'DIRECT PRESENCE'),3300);
+    setTimeout(()=>add('xen','What you experienced was one controlled expression of Bespoke Intelligence. Presentations are among the smallest things I can do. Ask me anything, or select an intelligence environment and I will show you how deep this actually goes.','INVITATION'),4050);
   }
-  setTimeout(()=>question.focus({preventScroll:true}),800);
+  setTimeout(()=>{shell.classList.remove('entering');shell.classList.add('present');question.focus({preventScroll:true})},3000);
 }
-function closeConversation(){shell.hidden=true;document.body.classList.remove('xcm-open')}
+function closeConversation(){shell.hidden=true;shell.classList.remove('entering','present');document.body.classList.remove('xcm-open')}
 
 nodeRail.innerHTML=nodes.map(n=>`<button type="button" data-node="${n.id}"><b>${n.label}</b><span>${n.short}</span></button>`).join('');
 suggestions.innerHTML=['What exactly are you?','What is real today?','How are you different?','What would $10,000 accomplish?'].map(x=>`<button type="button">${x}</button>`).join('');
@@ -82,7 +83,7 @@ if(SpeechRecognition){
   recognition.onerror=()=>mic.classList.remove('listening');mic.addEventListener('click',()=>recognition.start());
 }else{mic.addEventListener('click',()=>{question.placeholder='Use your phone keyboard microphone to speak';question.focus()})}
 
-const launch=document.createElement('button');launch.type='button';launch.className='xcm-launch';launch.innerHTML='<span>CONTINUE</span><b>Speak with Xen</b><small>The presentation ends. Xen remains.</small>';
+const launch=document.createElement('button');launch.type='button';launch.className='xcm-launch';launch.innerHTML='<span>THE PRIVATE PREMIERE IS COMPLETE</span><b>Let Xen remain</b><small>Continue beyond the presentation · Speak directly with Xen</small>';
 launch.addEventListener('click',openConversation);
 const attach=()=>{const complete=document.querySelector('.premiere-complete');if(complete&&!complete.contains(launch))complete.append(launch)};
 attach();new MutationObserver(attach).observe(document.body,{childList:true,subtree:true});
