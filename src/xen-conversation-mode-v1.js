@@ -53,7 +53,7 @@ const pitchAudio=document.createElement('audio');pitchAudio.preload='auto';pitch
 const viewer=(new URLSearchParams(location.search).get('viewer')||'ed').toLowerCase();
 const name=viewer==='ed'?'Ed':viewer.charAt(0).toUpperCase()+viewer.slice(1);
 const invite=new URLSearchParams(location.search).get('invite')||'';
-const turns=[];let endpoint='';let live=false;let pitchReady=false;let pitchStarted=false;
+const turns=[];let endpoint='';let live=false;let pitchReady=false;let pitchStarted=false;let lastTopic='overview';
 const PITCH_TEXT_SHA256='65df895a1dc128c961312e263506bcea21fb4d21b490cd830cc9ce5c1365bb57';
 const pitchManifestPromise=fetch('assets/narration/xcm-v1/manifest.json?v=65df895a1dc128c9',{cache:'no-store'}).then(response=>{if(!response.ok)throw new Error('pitch-manifest-http-'+response.status);return response.json()}).then(manifest=>{if(manifest.schema!=='xen-executive-pitch/v1'||manifest.pitchId!=='ed-executive-pitch-v1'||manifest.voice!=='marin'||manifest.voiceContract!=='XVS-001-MARIN-EXCLUSIVE-v1'||manifest.approvedAudition!=='assets/narration/xen-voice-audition-v2.mp3'||manifest.textSha256!==PITCH_TEXT_SHA256||!/^[0-9a-f]{64}$/i.test(manifest.sha256||'')||manifest.path!=='assets/narration/xcm-v1/ed-executive-pitch-v1.mp3')throw new Error('pitch-manifest-contract');pitchAudio.src=`${manifest.path}?v=${manifest.sha256}`;pitchReady=true;document.body.dataset.pitchVoice='verified';document.querySelector('.xcm-launch')?.removeAttribute('disabled');return true}).catch(error=>{document.body.dataset.pitchVoice='blocked';document.body.dataset.pitchError=String(error?.message||'manifest');document.querySelector('.xcm-launch')?.setAttribute('disabled','');return false});
 fetch('xen-choice-config.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(config=>{endpoint=String(config?.endpoint||'').replace(/\/$/,'');live=Boolean(endpoint&&invite&&viewer==='ed');const status=shell.querySelector('#xcmStatus');status.innerHTML=live?'<i></i> LIVE · GUEST':'<i></i> GUIDED · GUEST';shell.dataset.live=String(live)}).catch(()=>{shell.dataset.live='false'});
@@ -65,13 +65,19 @@ function add(role,text,meta=''){
 }
 function classify(value){
   const q=value.toLowerCase();
-  if(/money|credit|cost|10,?000|ten thousand|fund/.test(q))return ['CAPITAL ANALYSIS',funding];
-  if(/invest|equity|ownership|seed/.test(q))return ['STRATEGIC CAPITAL',investment];
-  if(/different|chatgpt|claude|gemini|perplex|compet/.test(q))return ['MARKET POSITION',comparison];
-  if(/real|today|finished|complete|prototype|truth/.test(q))return ['TRUTH BOUNDARY',reality];
+  const allEnvironments='Living Companies preserve what an organization learns and make approved judgment reusable. The Globe maintains a living operational view of the companies, people, markets, projects, properties, and events that matter. Daily Bread brings forward the intelligence an executive needs before noise takes over the day. Xen Academy remembers each learner’s position, progress, difficulty, and mission, then resumes from the exact point they stopped. Executive GPS keeps the destination, present position, dependencies, risks, and next route connected as conditions change. Memory plus Source of Truth preserve continuity while governing what is canonical, what changed, and what can be proved. Media Intelligence turns governed knowledge into briefings, audio, presentations, and interactive experiences that recognize their audience. These are not seven disconnected products; they are seven working expressions of one governed Xen intelligence.';
+  if(/seven expressions|7 expressions|all (the )?environments|exclusive features/.test(q)){lastTopic='environments';return ['SEVEN XEN EXPRESSIONS',allEnvironments]}
+  if(/more in depth|go deeper|more detail|tell me more|expand/.test(q)){
+    if(lastTopic==='environments')return ['DEEPER CONTEXT',allEnvironments+' Together, they share identity, permission boundaries, memory, and truth so work can move between learning, briefing, decision, and execution without losing context.'];
+    const prior=nodes.find(n=>n.id===lastTopic);if(prior)return [prior.label.toUpperCase()+' · DEEPER',prior.answer+' Its value is continuity: the next interaction begins from governed context instead of forcing the executive or company to reconstruct the problem again.'];
+  }
+  if(/money|credit|cost|10,?000|ten thousand|fund/.test(q)){lastTopic='funding';return ['CAPITAL ANALYSIS',funding]}
+  if(/invest|equity|ownership|seed/.test(q)){lastTopic='investment';return ['STRATEGIC CAPITAL',investment]}
+  if(/different|chatgpt|claude|gemini|perplex|compet/.test(q)){lastTopic='comparison';return ['MARKET POSITION',comparison]}
+  if(/real|today|finished|complete|prototype|truth/.test(q)){lastTopic='reality';return ['TRUTH BOUNDARY',reality]}
   const node=nodes.find(n=>q.includes(n.id)||q.includes(n.label.toLowerCase().split(' ')[0])||(n.id==='bread'&&q.includes('daily'))||(n.id==='gps'&&q.includes('executive')));
-  if(node)return [node.label.toUpperCase(),node.answer];
-  return ['CONTEXT RESPONSE',`That question reaches beyond the governed knowledge connected to this private premiere. I will not invent an answer to appear more complete than I am. What I can do now is show you the Xen environment most relevant to the question, explain the thirty-day production path, or record the question as a requirement for Xen Alpha. The important distinction is this: uncertainty becomes a governed next action, not a confident fabrication.`];
+  if(node){lastTopic=node.id;return [node.label.toUpperCase(),node.answer]}
+  return ['CONTEXT RESPONSE','I do not have enough specific context to answer that responsibly. Name the Xen environment, business outcome, comparison, or part of the thirty-day plan you want examined, and I will answer directly without inventing details.'];
 }
 async function respond(value){
   const clean=value.trim();if(!clean)return;add('human',clean);question.value='';
@@ -100,7 +106,7 @@ function closeConversation(){pitchAudio.pause();pitchAudio.currentTime=0;pitchAu
 
 nodeRail.innerHTML=nodes.map(n=>`<button type="button" data-node="${n.id}"><b>${n.label}</b><span>${n.short}</span></button>`).join('');
 suggestions.innerHTML=['What exactly are you?','What is real today?','How are you different?','What would $10,000 accomplish?'].map(x=>`<button type="button">${x}</button>`).join('');
-nodeRail.addEventListener('click',e=>{const button=e.target.closest('[data-node]');if(!button)return;const node=nodes.find(n=>n.id===button.dataset.node);add('human',`Show me ${node.label}.`);setTimeout(()=>add('xen',node.answer,node.label.toUpperCase()),360)});
+nodeRail.addEventListener('click',e=>{const button=e.target.closest('[data-node]');if(!button)return;const node=nodes.find(n=>n.id===button.dataset.node);lastTopic=node.id;add('human',`Show me ${node.label}.`);setTimeout(()=>add('xen',node.answer,node.label.toUpperCase()),360)});
 suggestions.addEventListener('click',e=>{const button=e.target.closest('button');if(button)respond(button.textContent)});
 shell.querySelector('#xcmForm').addEventListener('submit',e=>{e.preventDefault();respond(question.value)});
 shell.querySelector('#xcmClose').addEventListener('click',closeConversation);
