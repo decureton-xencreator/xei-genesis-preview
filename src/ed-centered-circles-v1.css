@@ -27,3 +27,10 @@
 .scene:nth-of-type(6)>.propagation-map>span:nth-child(3),
 .scene:nth-of-type(6)>.propagation-map>span:nth-child(5),
 .scene:nth-of-type(6)>.propagation-map>span:nth-child(7){left:80%!important}
+
+/* Warden: animations may not override the symmetric anchor transform. */
+.scene:nth-of-type(2)>.knowledge-field>span,
+.scene:nth-of-type(6)>.propagation-map>span{
+  animation:none!important;
+  transform:translate(-50%,-50%)!important;
+}
