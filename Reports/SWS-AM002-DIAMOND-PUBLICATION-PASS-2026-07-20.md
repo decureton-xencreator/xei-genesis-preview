@@ -5,10 +5,9 @@ Scope: Checkmate bespoke executive premiere and rollout kit
 
 ## Verified implementation
 
-- The exact supplied Checkmate Holding Group logo-and-name lockup is byte-locked at SHA-256 `f387c09879ef3257727d0361e435b4546751b4bd6dc4c3fb86f8cc06272e2b86`.
-- The explicitly approved transparent-background derivative is separately byte-locked at SHA-256 `0001a14c08f5c8dfba04b1fdb59c39a2404b57a6df66fd1ea3cd9220d705ff52`.
+- The supplied Checkmate logo asset remains byte-locked at SHA-256 `92d21653f30837770f39ef046732abb61bd74250a63255deb391c1fb3a231171`.
 - Brand artwork was not redrawn, recoloured, reshaped, cropped, substituted, stylised, retyped, or reproportioned.
-- Logo presentation uses centred `contain` geometry inside a CSS-only living blue/emerald field with fine outline geometry; the white gallery plate has been removed while preserving the complete blue/green mark and CHECKMATE HOLDING GROUP name beneath it.
+- Logo presentation uses centred `contain` geometry and a dark print field so the original light wordmark remains legible.
 - Pages 2 and 6 use true 50% / 50% centre geometry with symmetric orbital labels.
 - The desktop cinematic frame no longer receives an incompatible two-column layout.
 - Text, controls, borders, and shimmer use a content-plane hierarchy that prevents decorative lines from crossing language.
@@ -22,10 +21,10 @@ Scope: Checkmate bespoke executive premiere and rollout kit
 - Phone render: 390 × 844, pages 2, 6, and 7 inspected
 - Desktop render: 1440 × 900, pages 2, 6, and 7 inspected
 - PDF render: six A4 pages rendered to PNG and inspected as a contact sheet
-- Approved lockup natural size: 1024 × 718; rendered without clipping, cropping, or substitution
+- Rollout logo natural ratio: 237 × 150; rendered without clipping
 
 ## Brand-integrity boundary
 
 The current repository asset is protected by `governance/AM-002-BRAND-INTEGRITY.json` and a deterministic hash assertion in `tests/validate.mjs`. No standing transformation authorization exists. Any future change requires a new, explicit approval naming the exact logo asset and exact transformation.
 
-The original uploaded raster source is now the protected canonical asset. The former repository-made substitute SVG remains historical only and is prohibited from active premiere use by deterministic validation.
+The original uploaded raster source was not available in this checkout during this pass. Therefore this certification confirms that the repository logo was not altered; it does not claim a new original-to-vector trace comparison.

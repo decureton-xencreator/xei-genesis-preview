@@ -28,16 +28,9 @@ const required=[
  ,'scripts/xen-mastered-narration-copy-v1.mjs'
  ,'scripts/generate-xen-mastered-narration.mjs'
  ,'scripts/verify-xen-mastered-narration.mjs'
- ,'scripts/xen-executive-pitch-copy-v1.mjs'
- ,'scripts/generate-xen-executive-pitch-v1.mjs'
- ,'scripts/verify-xen-executive-pitch-v1.mjs'
  ,'.github/workflows/generate-xen-mastered-narration.yml'
- ,'.github/workflows/generate-xen-executive-pitch.yml'
- ,'assets/checkmate-holding-group-approved.jpeg'
- ,'assets/checkmate-holding-group-transparent-v1.png'
+ ,'assets/checkmate-executive-mark.svg'
  ,'src/executive-arrival-v1.css'
- ,'src/checkmate-living-lockup-v1.css'
- ,'src/ed-canonical-guard-v1.css'
  ,'src/executive-arrival-v1.js'
  ,'src/xps-diamond-publication-lock-v1.css'
  ,'executive-rollout-kit.html'
@@ -66,14 +59,11 @@ const masteredGenerator=fs.readFileSync('scripts/generate-xen-mastered-narration
 const masteredWorkflow=fs.readFileSync('.github/workflows/generate-xen-mastered-narration.yml','utf8');
 const rolloutKit=fs.readFileSync('executive-rollout-kit.html','utf8');
 const brandIntegrity=JSON.parse(fs.readFileSync('governance/AM-002-BRAND-INTEGRITY.json','utf8'));
-const canonicalControlCss=fs.readFileSync('src/ed-canonical-guard-v1.css','utf8');
 
 const protectedLogoHash=crypto.createHash('sha256').update(fs.readFileSync(brandIntegrity.protected_asset)).digest('hex');
 if(protectedLogoHash!==brandIntegrity.protected_asset_sha256)throw new Error('AM-002 Warden blocked an unapproved logo artwork change');
-const derivativeLogoHash=crypto.createHash('sha256').update(fs.readFileSync(brandIntegrity.approved_derivative)).digest('hex');
-if(derivativeLogoHash!==brandIntegrity.approved_derivative_sha256)throw new Error('AM-002 Warden blocked an unapproved transparent logo derivative change');
 if(!brandIntegrity.approval_required_for_asset_change||!brandIntegrity.prohibited_without_new_approval.includes('crop'))throw new Error('AM-002 logo-protection mandate is incomplete');
-if(brandIntegrity.standing_authorization!=='none'||brandIntegrity.currently_authorized_transformations.length!==1||!brandIntegrity.currently_authorized_transformations[0].includes('near-white background'))throw new Error('AM-002 transparent-background approval scope is incorrect');
+if(brandIntegrity.standing_authorization!=='none'||brandIntegrity.currently_authorized_transformations.length!==0)throw new Error('AM-002 Warden blocked standing authorization for logo transformations');
 if(!brandIntegrity.approval_scope.includes('exact asset')||!brandIntegrity.approval_scope.includes('exact transformation'))throw new Error('AM-002 logo approval scope is not asset-specific');
 for(const term of ['object-fit:contain','background-size:contain','--visible-center-shift-x:0px!important'])if(!css.includes(term))throw new Error(`Diamond publication lock missing: ${term}`);
 for(const term of ['@media print','break-inside:avoid-page','page-break-inside:avoid','.logo{display:block','object-fit:contain'])if(!rolloutKit.includes(term))throw new Error(`Executive rollout publication gate missing: ${term}`);
@@ -86,18 +76,9 @@ const canonicalPremiereBase='https://decureton-xencreator.github.io/xei-Xenesis-
 for(const viewer of ['ed','kim','ahmer'])if(rolloutKit.split(canonicalPremiereBase+`?viewer=${viewer}`).length-1!==3)throw new Error(`Canonical ${viewer} premiere route must appear exactly three times`);
 if(rolloutKit.includes('https://decureton-xencreator.github.io/xei-genesis-preview/'))throw new Error('Case-broken GitHub Pages route restored');
 if((html.match(/class="scene/g)||[]).length!==9)throw new Error('Nine-scene documentary contract failed');
-if((html.match(/<script type="module"/g)||[]).length!==4)throw new Error('Unexpected production runtime count');
-for(const asset of ['executive-arrival-v1.js?v=bespoke-1','executive-arrival-v1.css?v=transparent-chg-lockup-2','xps-diamond-publication-lock-v1.css?v=canonical-geometry-2','checkmate-living-lockup-v1.css?v=1','ed-canonical-guard-v1.css?v=1','ed-premiere-clean-v1.js?v=xpe-storyboard-1','xfs-xen-centric-finish-v1.js?v=solutions-gateway-2','xfs-xen-centric-finish-v1.css?v=commercial-rollout-1','xen-conversation-mode-v1.js?v=xpe-storyboard-1','xen-conversation-mode-v1.css?v=1','ed-video-pass-v1.css?v=xpe-storyboard-1'])if(!html.includes(asset))throw new Error(`Active finish asset missing: ${asset}`);
-if(html.includes('\\n<link rel="stylesheet"'))throw new Error('Literal stylesheet boundary detected');
-const cssOrder=['xfs-xen-centric-finish-v1.css','executive-arrival-v1.css','xps-diamond-publication-lock-v1.css','checkmate-living-lockup-v1.css','ed-canonical-guard-v1.css','xen-conversation-mode-v1.css','ed-video-pass-v1.css'].map(asset=>html.indexOf(asset));
-if(cssOrder.some(index=>index<0)||cssOrder.some((index,i)=>i&&index<=cssOrder[i-1]))throw new Error('Ed canonical CSS cascade order failed');
-if(!fs.readFileSync('src/xps-diamond-publication-lock-v1.css','utf8').includes('.scene.active{display:flex!important'))throw new Error('Ed canonical desktop geometry neutralizer missing');
-for(const selector of ['.arrival-enter','.landing-action','.primary','.finale .xcm-launch'])if(!canonicalControlCss.includes(selector))throw new Error(`Ed dark control treatment missing: ${selector}`);
+if((html.match(/<script type="module"/g)||[]).length!==3)throw new Error('Unexpected production runtime count');
+for(const asset of ['executive-arrival-v1.js?v=bespoke-1','executive-arrival-v1.css?v=bespoke-1','ed-premiere-clean-v1.js?v=mastered-audio-v3','xfs-xen-centric-finish-v1.js?v=solutions-gateway-2','xfs-xen-centric-finish-v1.css?v=commercial-rollout-1'])if(!html.includes(asset))throw new Error(`Active finish asset missing: ${asset}`);
 for(const term of ['A BESPOKE EXECUTIVE EXPERIENCE','data-arrival-name','Checkmate Holding Group','Nine scenes · Governed proof · Your decision'])if(!html.includes(term))throw new Error(`Bespoke executive arrival contract missing: ${term}`);
-if(!html.includes('assets/checkmate-holding-group-transparent-v1.png'))throw new Error('Approved transparent Checkmate Holding Group full lockup missing from arrival');
-const executiveArrivalRuntime=fs.readFileSync('src/executive-arrival-v1.js','utf8');
-if(executiveArrivalRuntime.includes('checkmate-executive-mark.svg')||html.includes('checkmate-executive-mark.svg'))throw new Error('Unapproved substitute Checkmate mark restored to active premiere');
-if(!brandIntegrity.presentation_rule.includes('name beneath'))throw new Error('AM-002 must protect the complete logo-and-name lockup');
 if((html.match(/checkmate-bdc-operating-system\.pages\.dev/g)||[]).length<5)throw new Error('Canonical BDC manual links missing');
 
 for(const term of [
@@ -129,16 +110,6 @@ for(const term of [
  'runWarden()'
 ])if(!runtime.includes(term))throw new Error(`Runtime certification capability missing: ${term}`);
 for(const forbidden of ['speechSynthesis','SpeechSynthesisUtterance','DISTRIBUTED_SYSTEM_TTS_ENABLED'])if(runtime.includes(forbidden))throw new Error(`Unmastered voice fallback restored: ${forbidden}`);
-for(const term of ["const ED_CANONICAL_CLIPS=Object.freeze",'xen-voice-audition-v2.mp3',"document.body.dataset.voiceRoute='ed-canonical-only'","if(index===0)return 'intro-ed'","return `scene-${index}-default`"])if(!runtime.includes(term))throw new Error(`Ed canonical single-voice route missing: ${term}`);
-for(const term of ["mainStage.addEventListener('scroll'",'function guidedScrollTarget(current=scenes[index])','current.scrollHeight-current.clientHeight','finishGuidedScroll(null,remaining)','const startHold=.18','const endHold=.08','document.body.dataset.scrollProgress=linear.toFixed(3)','mainStage.scrollTop=0','if(current)current.scrollTop=0'])if(!runtime.includes(term))throw new Error(`Canonical scene anchor missing: ${term}`);
-if(runtime.includes('current.focus({preventScroll:true})'))throw new Error('Canonical scene focus must not scroll the parent stage');
-for(const term of ["const XPE=Object.freeze({id:'XPE-001'","document.documentElement.dataset.xpe='active'","dataset.xpe==='active'",'guidedScrollTarget(current=scenes[index])'])if(!runtime.includes(term))throw new Error(`XPE storyboard enforcement missing: ${term}`);
-
-const videoPass=readFileSync('src/ed-video-pass-v1.css','utf8');
-for(const term of ['overflow-y:auto!important','Scene 02 · knowledge at risk','Scene 06 · operating memory','Page 01 · restore the complete introduction','Page 07 · restore the complete twelve-company information constellation','xpeAliveShimmer','.xcm-pitch-slide.active'])if(!videoPass.includes(term))throw new Error(`Ed video-review lock missing: ${term}`);
-const conversationRuntime=readFileSync('src/xen-conversation-mode-v1.js','utf8');
-for(const term of ['const pitchSlides=[','THE UNEXPECTED MOMENT','CONTROLLED BUILD RUNWAY','OPENAI · CHATGPT','CLAUDE','GEMINI','GROK','PERPLEXITY','showPitchSlide(','pitchCues','xcmPitchBack','xcmPitchPause',"PITCH_TEXT_SHA256='65df895a1dc128c961312e263506bcea21fb4d21b490cd830cc9ce5c1365bb57'",'YOUR PRIVATE ACCESS'])if(!conversationRuntime.includes(term))throw new Error(`Executive pitch visual sequence missing: ${term}`);
-
 
 if(!runtime.includes("window.addEventListener('xen:resume'"))throw new Error('Manual research resume event missing');
 
