@@ -158,7 +158,8 @@ for(const term of [
 
 for(const term of ['XMP-M4 PRESENTATION KIT INHERITANCE','height:100dvh','grid-template-rows:auto minmax(0,1fr) auto','content before chrome','@media(min-width:900px)','@media(max-width:899px)','@media(max-width:620px)','focus-visible','prefers-reduced-motion'])if(!css.includes(term))throw new Error(`XMP presentation standard missing: ${term}`);
 
-if(!html.includes('src/xcm-portrait-v1.css?v=1'))throw new Error('Portrait pitch composition is not loaded after the canonical deck');
+if(!html.includes('src/xcm-portrait-v1.css?v=2'))throw new Error('Portrait pitch composition is not loaded after the canonical deck');
+if(html.indexOf('src/xcm-portrait-v1.css?v=2')<html.indexOf('src/ed-finale-access-fix-v1.css'))throw new Error('Portrait pitch composition must load after legacy comparison overrides');
 for(const term of ['orientation:portrait','grid-template-rows:auto minmax(0,1fr)','safe-area-inset-bottom','.xcm-compare article','.xcm-distinction>article','.xcm-env-grid article','max-height:700px'])if(!pitchPortrait.includes(term))throw new Error(`Portrait pitch protection missing: ${term}`);
 
 console.log('PASS XPS mobile and accessibility surface');
