@@ -1,0 +1,30 @@
+{
+  "record_id": "XEN-FEDERATION-SYNC",
+  "version": "1.0.0",
+  "status": "ACTIVE_VERIFIED",
+  "effective_date": "2026-07-23",
+  "repository": "decureton-xencreator/xei-Xenesis-preview",
+  "repository_role": "CONSUMER_XENESIS_RUNTIME_PREVIEW",
+  "default_branch": "main",
+  "authority": ["Warden", "XER", "AM-002", "XCC-002", "XGW-001"],
+  "canonical_source_repository": "decureton-xencreator/xen-operating-system",
+  "canonical_source_path": "Governance/Repository-Network/XCC-002-PROMPT-BOOTSTRAP.json",
+  "federation_members": ["decureton-xencreator/xen-operating-system","decureton-xencreator/daily-bread-","decureton-xencreator/xei-Xenesis-preview","decureton-xencreator/xenengine-site"],
+  "warden_requirements": {
+    "activate_on_explicit_sync_or_build_directive": true,
+    "enumerate_connected_repositories": true,
+    "verify_read_and_write_access": true,
+    "inspect_affected_repositories": true,
+    "execute_verified_updates_without_requiring_repeated_user_instruction": true,
+    "report_commit_sha_for_every_repository_write": true,
+    "forbid_unverified_sync_claims": true,
+    "disclose_blockers_and_degraded_states": true
+  },
+  "xer_requirements": {
+    "orchestrate_cross_repository_dependencies": true,
+    "preserve_repository_role_boundaries": true,
+    "distinguish_specification_implementation_and_deployment": true
+  },
+  "last_verified_sync": "2026-07-23",
+  "sync_state": "FEDERATED"
+}
