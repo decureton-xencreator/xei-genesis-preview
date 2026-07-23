@@ -14,6 +14,14 @@
 - The scheduler is an initial staging policy. Its fairness and latency envelope is not certified until multi-tenant load and failure-injection measurements are recorded.
 - Continue with guard-expiry/recovery tests, retry classification, repository transactions, and server-backed Xenesis integration while preserving the shell isolation gate.
 
+## 2026-07-23 recovery milestone
+
+- Expired worker leases and provider locks are reclaimed together, and the interrupted running attempt is durably marked `abandoned`.
+- Recovery evidence distinguishes work interrupted before provider dispatch from ambiguous interruption after dispatch.
+- Any attempt with provider-dispatch evidence is classified `ambiguous_after_provider_dispatch_no_retry`; it is never automatically retried because the provider may have accepted a paid request before the interruption.
+- Terminal provider results are also non-retryable. Only interruption proven to precede provider dispatch is classified retry-safe.
+- Continue with multi-tenant race/load measurement and server-backed Xenesis integration. This recovery unit does not expand the certified provider-concurrency envelope or authorize a new Claude call.
+
 The production experience remains owned by the existing root index.html and its nine-scene client runtime. The Continuum module has no import, script tag, route, build step, or lifecycle dependency from that shell.
 
 ## Local continuation

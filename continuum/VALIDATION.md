@@ -79,3 +79,12 @@ The earlier statement denying all remote deployment evidence is retained as the 
 - Strict TypeScript and 27 runtime tests across six files pass. Scheduler tests cover priority, both capacity dimensions, blocked dependencies, bounded starvation aging, and the fairness tie-break.
 - These are implementation and staging-validation facts, not a production concurrency certification. Multi-tenant load, workflow-start races, crash recovery, and repository-conflict measurements remain open.
 - Migration `0005_global_provider_lock.sql` corrects the preliminary tenant-scoped provider lock to a globally unique active provider lock, matching the configured Anthropic concurrency limit of one.
+
+## Guard-expiry and retry-safety validation — 2026-07-23
+
+- Expired worker leases and provider resource locks are reclaimed atomically with abandoned-attempt evidence.
+- Recovery classifies interruption before provider dispatch as retry-safe.
+- Interruption after provider dispatch is classified ambiguous and non-retryable, preventing duplicate paid Claude calls when acceptance is unknown.
+- Recorded terminal provider results remain non-retryable even if dispatch telemetry is incomplete.
+- Strict TypeScript, the certified Xenesis shell gate, structure/secret scan, and 32 Continuum tests pass locally.
+- No staging deployment or Anthropic request is claimed by this local validation record.
